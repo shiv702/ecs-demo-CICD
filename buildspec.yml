@@ -8,15 +8,17 @@ env:
 phases:
   pre_build:
     commands:
-      - "echo Logging in to Amazon ECR..."
-      - "aws --version"
-      - "ACCOUNT_ID=$(aws sts get-caller-identity --query account --output text)"
-      - "REGION=$AWS_DEFAULT_REGION"
-      - "IMAGE_REPO_URI=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME"
-      - "echo Using account ${ACCOUNT_ID}, region ${REGION}"
-      - "echo ECR repo URI: ${IMAGE_REPO_URI}"
-      - "aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $IMAGE_REPO_URI"
-      - "IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)"
+      - echo "Logging in to Amazon ECR..."
+      - aws --version
+      - ACCOUNT_ID=$(aws sts get-caller-identity --query account --output text)
+      - REGION=$AWS_DEFAULT_REGION
+      - IMAGE_REPO_URI=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME
+      - echo "Using account ${ACCOUNT_ID}, region ${REGION}"
+      - echo "ECR repo URI: ${IMAGE_REPO_URI}"
+      # Get ECR login password and then login (2 steps so errors are clearer)
+      - aws ecr get-login-password --region $REGION > /tmp/ecr_password.txt
+      - docker login --username AWS --password-stdin $IMAGE_REPO_URI < /tmp/ecr_password.txt
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
   build:
     commands:
