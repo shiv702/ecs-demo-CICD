@@ -19,18 +19,18 @@ phases:
       - aws ecr get-login-password --region $REGION > /tmp/ecr_password.txt
       - docker login --username AWS --password-stdin $IMAGE_REPO_URI < /tmp/ecr_password.txt
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      
+
   build:
     commands:
-      - echo Build started on $(date)
-      - echo Building the Docker image...
+      - echo "Build started on $(date)"
+      - echo "Building the Docker image..."
       - docker build -t $IMAGE_REPO_URI:$IMAGE_TAG .
 
   post_build:
     commands:
-      - echo Pushing the Docker image to ECR...
+      - echo "Pushing image to ECR..."
       - docker push $IMAGE_REPO_URI:$IMAGE_TAG
-      - echo Writing image definitions file...
+      - echo "Writing image definitions file..."
       - printf '[{"name":"app-container","imageUri":"%s"}]' $IMAGE_REPO_URI:$IMAGE_TAG > imagedefinitions.json
 
 artifacts:
