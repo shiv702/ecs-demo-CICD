@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     IMAGE_REPO_NAME: "ecs-cicd-demo"
-    AWS_DEFAULT_REGION: "ap-south-1"   # put your region here
+    AWS_DEFAULT_REGION: "ap-south-1"   # change if your region is different
 
 phases:
   pre_build:
@@ -13,7 +13,9 @@ phases:
       - ACCOUNT_ID=$(aws sts get-caller-identity --query account --output text)
       - REGION=$AWS_DEFAULT_REGION
       - IMAGE_REPO_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME"
-      - $(aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $IMAGE_REPO_URI)
+      - echo "ECR repo URI: $IMAGE_REPO_URI"
+      # ❗ Correct non-interactive login command (no $())
+      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $IMAGE_REPO_URI
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
   build:
