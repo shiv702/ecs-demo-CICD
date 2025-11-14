@@ -4,7 +4,7 @@ env:
   variables:
     IMAGE_REPO_NAME: "ecs-cicd-demo"
   parameter-store:
-    AWS_DEFAULT_REGION: "/demo/region"   # OPTIONAL – or hardcode region below
+    AWS_DEFAULT_REGION: "ap-south-1"   # OPTIONAL – or hardcode region below
 
 phases:
   pre_build:
