@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    IMAGE_REPO_NAME: ecs-cicd-demo
+    IMAGE_REPO_NAME: 970547338216.dkr.ecr.ap-south-1.amazonaws.com/ecs-cicd-demo
     AWS_DEFAULT_REGION: ap-south-1   # change if your region is different
 
 phases:
