@@ -1,0 +1,34 @@
+version: 0.2
+
+env:
+  variables:
+    IMAGE_REPO_NAME: "ecs-cicd-demo"
+  parameter-store:
+    AWS_DEFAULT_REGION: "/demo/region"   # OPTIONAL – or hardcode region below
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - ACCOUNT_ID=$(aws sts get-caller-identity --query account --output text)
+      - REGION=${AWS_DEFAULT_REGION:-ap-south-1}
+      - IMAGE_REPO_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME"
+      - $(aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $IMAGE_REPO_URI)
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_URI:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_URI:$IMAGE_TAG $IMAGE_REPO_URI:latest
+  post_build:
+    commands:
+      - echo Pushing the Docker images...
+      - docker push $IMAGE_REPO_URI:$IMAGE_TAG
+      - docker push $IMAGE_REPO_URI:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"app-container","imageUri":"%s"}]' $IMAGE_REPO_URI:$IMAGE_TAG > imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
