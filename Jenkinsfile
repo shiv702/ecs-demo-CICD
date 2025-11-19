@@ -55,15 +55,15 @@ pipeline {
             }
         }
 
-        stage('Build App (optional)') {
-            steps {
-                sh '''
-                  echo "Installing dependencies..."
-                  npm install
-                  # npm test || echo "No tests configured"
-                '''
-            }
-        }
+        // stage('Build App (optional)') {
+        //     steps {
+        //         sh '''
+        //           echo "Installing dependencies..."
+        //           npm install
+        //           # npm test || echo "No tests configured"
+        //         '''
+        //     }
+        // }
 
         stage('Build Docker Image') {
             steps {
