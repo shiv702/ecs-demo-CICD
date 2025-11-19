@@ -87,7 +87,7 @@ pipeline {
             steps {
                 // If you use IAM role on EC2, you can REMOVE this withCredentials block
             withCredentials([usernamePassword(
-                    credentialsId: 'aws-jenkins-creds',
+                    credentialsId: 'aws-creds',
                     usernameVariable: 'AWS_ACCESS_KEY_ID',
                     passwordVariable: 'AWS_SECRET_ACCESS_KEY'
                 )]) {
