@@ -23,14 +23,14 @@ pipeline {
                     env.AWS_REGION     = env.AWS_REGION ?: 'ap-south-1'
                     env.AWS_ACCOUNT_ID = env.AWS_ACCOUNT_ID ?: '970547338216'
 
-                    // 3) Environment-specific naming
-                    def envName = params.TARGET_ENV ?: 'dev'
-                    env.DEPLOY_ENV   = envName
+                    // // 3) Environment-specific naming
+                    // def envName = params.TARGET_ENV ?: 'dev'
+                    // env.DEPLOY_ENV   = envName
 
                     // Example naming convention; change if yours is different
-                    env.ECR_REPO_NAME = "ecs-cicd-demo-${envName}"
-                    env.ECS_CLUSTER   = "ecs-cicd-demo-cluster-${envName}"
-                    env.ECS_SERVICE   = "ecs-cicd-demo-service-${envName}"
+                    env.ECR_REPO_NAME = "ecs-cicd-demo"
+                    env.ECS_CLUSTER   = "ecs-cicd-demo-cluster"
+                    env.ECS_SERVICE   = "ecs-cicd-demo-service"
 
                     env.ECR_REGISTRY  = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
                     env.ECR_REPO_URI  = "${env.ECR_REGISTRY}/${env.ECR_REPO_NAME}"
