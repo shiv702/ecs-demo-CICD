@@ -28,9 +28,9 @@ pipeline {
                     // env.DEPLOY_ENV   = envName
 
                     // Example naming convention; change if yours is different
-                    env.ECR_REPO_NAME = "ecs-cicd-demo"
-                    env.ECS_CLUSTER   = "ecs-cicd-demo-cluster"
-                    env.ECS_SERVICE   = "ecs-cicd-demo-service"
+                    env.ECR_REPO_NAME = "${env.ECR_REPO_NAME}"
+                    env.ECS_CLUSTER   = "${env.ECS_CLUSTER}"
+                    env.ECS_SERVICE   = "${env.ECS_SERVICE}"
 
                     env.ECR_REGISTRY  = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
                     env.ECR_REPO_URI  = "${env.ECR_REGISTRY}/${env.ECR_REPO_NAME}"
